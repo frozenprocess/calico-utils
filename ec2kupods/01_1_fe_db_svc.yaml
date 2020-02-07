@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-db-svc
+  namespace: fe-db
+spec:
+  selector:
+    app: fe-dbapp
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  # no to random ips!!!
+  clusterIP: 10.107.154.21
+  type: ClusterIP

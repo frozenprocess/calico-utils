@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-web-nginx-pods
+  namespace: fe-web
+  labels:
+    app: fe-webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fe-webapp
+  template:
+    metadata:
+      labels:
+        app: fe-webapp
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.17.8
+        ports:
+        - containerPort: 80

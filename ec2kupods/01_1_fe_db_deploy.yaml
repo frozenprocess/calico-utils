@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe-db-redis-pods
+  namespace: fe-db
+  labels:
+    app: fe-dbapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fe-dbapp
+  template:
+    metadata:
+      labels:
+        app: fe-dbapp
+    spec:
+      containers:
+      - name: redis
+        image: redis:5.0.7
+        ports:
+        - containerPort: 6379
