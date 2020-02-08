@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-redis-ff-db2web
+  namespace: fe-web
+spec:
+  podSelector:
+    matchLabels:
+      app: fe-webapp
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels: 
+          name: fe-dbns
+    ports:
+      - protocol: TCP
+        port: 6379
