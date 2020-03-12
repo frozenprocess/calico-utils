@@ -1,0 +1,47 @@
+#### This file forms our edge pods that clients can browse
+# first step we create our namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bo-app
+---
+# deployment with a label
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bo-app-http
+  namespace: bo-app
+  labels:
+    app: l-bo-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: l-bo-app
+  template:
+    metadata:
+      labels:
+        app: l-bo-app
+    spec:
+      containers:
+      - name: d-bo-app
+        image: rezareza/goapp
+        ports:
+        - containerPort: 80
+---
+# service Exposes service to our edge pods
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bo-app
+  name: bo-svc-app
+  labels:
+    app: l-bo-svc-app
+spec:
+  selector:
+    app: l-bo-app
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+

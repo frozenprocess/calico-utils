@@ -1,0 +1,48 @@
+#### This file forms our edge pods that clients can browse
+# first step we create our namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fo-edge
+
+---
+# deployment with a label
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fo-ngx
+  namespace: fo-edge
+  labels:
+    app: l-fo-ngx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: l-fo-ngx
+  template:
+    metadata:
+      labels:
+        app: l-fo-ngx
+    spec:
+      containers:
+      - name: d-fo-ngx
+        image: rezareza/gongx:latest
+        ports:
+        - containerPort: 80
+---
+# service Exposes service to clients
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: fo-edge
+  name: fo-svc-edge
+  labels:
+    app: l-fo-svc-edge
+spec:
+  selector:
+    app: l-fo-ngx
+
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80

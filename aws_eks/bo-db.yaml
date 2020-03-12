@@ -1,0 +1,47 @@
+#### This file forms our edge pods that clients can browse
+# first step we create our namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bo-db
+---
+# deployment with a label
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bo-db-srv
+  namespace: bo-db
+  labels:
+    app: l-bo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: l-bo-db
+  template:
+    metadata:
+      labels:
+        app: l-bo-db
+    spec:
+      containers:
+      - name: d-bo-db
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+---
+# service Exposes service to our edge pods
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bo-db
+  name: bo-svc-db
+  labels:
+    app: l-bo-svc-db
+spec:
+  selector:
+    app: l-bo-db
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 6379
+
